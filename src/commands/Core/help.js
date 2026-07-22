@@ -40,6 +40,7 @@ const CATEGORY_ICONS = {
     Birthday: "🎂",
     "Join To Create": "🔌",
     Verification: "✅",
+    WL: "📋",
 };
 
 function formatCategoryName(rawCategory) {
