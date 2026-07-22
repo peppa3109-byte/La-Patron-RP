@@ -10,9 +10,8 @@ import { replyUserError, ErrorTypes } from '../../utils/errorHandler.js';
 import { logger } from '../../utils/logger.js';
 
 const DEFAULT_BANNER_URL = 'https://i.imgur.com/0eOqo3B.png';
-const DEFAULT_TITLE = 'ENVENENADO ESTA ABIERTO';
+const DEFAULT_TITLE = 'Envenenado RP';
 const DEFAULT_CONNECT = 'cfx.re/join/xlladb5';
-const DEFAULT_EXTRA = 'O ABRE <#1518421283946238103> si tienes problemas para ingresar';
 
 export default {
   data: new SlashCommandBuilder()
@@ -50,7 +49,7 @@ export default {
         .addStringOption((opt) =>
           opt
             .setName('mensaje')
-            .setDescription('Texto extra del anuncio')
+            .setDescription('Texto extra del anuncio (opcional)')
             .setRequired(false),
         )
         .addStringOption((opt) =>
@@ -121,26 +120,23 @@ export default {
       let imageUrl;
       let pingEveryone;
 
-if (sub === 'enviar') {
-  title = 'Envenenado RP';
-  connect = 'cfx.re/join/xlladb5';
-  extra = DEFAULT_EXTRA;
-  imageUrl = 'https://i.imgur.com/0eOqo3B.png';
-  pingEveryone = true;
-} else {
-  title = interaction.options.getString('titulo');
-  connect = interaction.options.getString('connect');
-  extra = interaction.options.getString('mensaje') || DEFAULT_EXTRA;
-  imageUrl = interaction.options.getString('imagen') || DEFAULT_BANNER_URL;
-  pingEveryone = interaction.options.getBoolean('everyone') !== false;
-}
+      if (sub === 'enviar') {
+        title = DEFAULT_TITLE;
+        connect = DEFAULT_CONNECT;
+        extra = '';
+        imageUrl = DEFAULT_BANNER_URL;
+        pingEveryone = true;
+      } else {
+        title = interaction.options.getString('titulo');
+        connect = interaction.options.getString('connect');
+        extra = interaction.options.getString('mensaje') || '';
+        imageUrl = interaction.options.getString('imagen') || DEFAULT_BANNER_URL;
+        pingEveryone = interaction.options.getBoolean('everyone') !== false;
+      }
 
-      const description = [
-        '```',
-        connect,
-        '```',
-        extra,
-      ].join('\n');
+      const description = extra
+        ? ['```', connect, '```', extra].join('\n')
+        : ['```', connect, '```'].join('\n');
 
       const embed = new EmbedBuilder()
         .setColor(0x9b00ff)
