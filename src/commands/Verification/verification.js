@@ -44,6 +44,12 @@ export default {
                         .setMaxLength(80)
                         .setRequired(false)
                 )
+                .addStringOption(option =>
+                    option
+                        .setName("imagen")
+                        .setDescription("URL de la imagen del panel de verificación")
+                        .setRequired(false)
+                )
         )
         .addSubcommand(subcommand =>
             subcommand
@@ -119,10 +125,10 @@ async function handleSetup(interaction, guild, client) {
         PermissionFlagsBits.SendMessages,
         PermissionFlagsBits.EmbedLinks
     ];
-    const missingChannelPerms = requiredChannelPermissions.filter(perm => 
+    const missingChannelPerms = requiredChannelPermissions.filter(perm =>
         !verificationChannel.permissionsFor(botMember).has(perm)
     );
-    
+
     if (missingChannelPerms.length > 0) {
         throw createError(
             `Missing channel permissions: ${missingChannelPerms.join(', ')}`,
@@ -182,48 +188,49 @@ async function handleSetup(interaction, guild, client) {
 
     await InteractionHelper.safeDefer(interaction);
 
-const verifyEmbed = createEmbed({
-    title: "Verificación del servidor",
-    description: message,
-    color: getColor('success'),
-    image: imageUrl || undefined,
-});
+    const verifyEmbed = createEmbed({
+        title: "Verificación del servidor",
+        description: message,
+        color: getColor('success'),
+        image: imageUrl || undefined,
+    });
 
-const verifyButton = new ActionRowBuilder().addComponents(
-    new ButtonBuilder()
-        .setCustomId("verify_user")
-        .setLabel(buttonText)
-        .setStyle(ButtonStyle.Secondary)
-);
+    const verifyButton = new ActionRowBuilder().addComponents(
+        new ButtonBuilder()
+            .setCustomId("verify_user")
+            .setLabel(buttonText)
+            .setStyle(ButtonStyle.Secondary)
+    );
 
     const verifyMessage = await verificationChannel.send({
         embeds: [verifyEmbed],
         components: [verifyButton]
     });
 
-guildConfig.verification = {
-    enabled: true,
-    channelId: verificationChannel.id,
-    messageId: verifyMessage.id,
-    roleId: verifiedRole.id,
-    message: message,
-    buttonText: buttonText,
-    imageUrl: imageUrl,
-};
+    guildConfig.verification = {
+        enabled: true,
+        channelId: verificationChannel.id,
+        messageId: verifyMessage.id,
+        roleId: verifiedRole.id,
+        message: message,
+        buttonText: buttonText,
+        imageUrl: imageUrl,
+    };
 
     await setGuildConfig(client, guild.id, guildConfig);
 
-await InteractionHelper.safeEditReply(interaction, {
-    embeds: [successEmbed(
-        'Sistema de verificación actualizado',
-        [
-            `Canal: ${verificationChannel}`,
-            `Rol verificado: ${verifiedRole}`,
-            `Texto del botón: ${buttonText}`,
-            `Imagen: ${imageUrl || 'Ninguna'}`,
-        ].join('\n')
-    )]
-});
+    await InteractionHelper.safeEditReply(interaction, {
+        embeds: [successEmbed(
+            'Sistema de verificación actualizado',
+            [
+                `Canal: ${verificationChannel}`,
+                `Rol verificado: ${verifiedRole}`,
+                `Texto del botón: ${buttonText}`,
+                `Imagen: ${imageUrl || 'Ninguna'}`,
+            ].join('\n')
+        )]
+    });
+}
 
 async function handleRemove(interaction, guild, client) {
     const targetUser = interaction.options.getUser("user");
