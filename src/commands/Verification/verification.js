@@ -187,13 +187,12 @@ async function handleSetup(interaction, guild, client) {
         color: getColor('success')
     });
 
-    const verifyButton = new ActionRowBuilder().addComponents(
-        new ButtonBuilder()
-            .setCustomId("verify_user")
-            .setLabel(buttonText)
-            .setStyle(ButtonStyle.Success)
-            .setEmoji("✅")
-    );
+const verifyButton = new ActionRowBuilder().addComponents(
+    new ButtonBuilder()
+        .setCustomId("verify_user")
+        .setLabel(buttonText)
+        .setStyle(ButtonStyle.Secondary)
+);
 
     const verifyMessage = await verificationChannel.send({
         embeds: [verifyEmbed],
