@@ -1,11 +1,10 @@
 import { SlashCommandBuilder, PermissionFlagsBits, ChannelType } from 'discord.js';
 import { logger } from '../../utils/logger.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
-
 import dashboard from './modules/logging_dashboard.js';
 import channel from './modules/logging_channel.js';
-
 import { replyUserError, ErrorTypes } from '../../utils/errorHandler.js';
+
 export default {
     data: new SlashCommandBuilder()
         .setName('logging')
@@ -30,6 +29,7 @@ export default {
                             { name: 'Audit (moderation, messages, members…)', value: 'audit' },
                             { name: 'Applications', value: 'applications' },
                             { name: 'Reports', value: 'reports' },
+                            { name: 'Bans (baneos y desbaneos)', value: 'bans' },
                         ),
                 )
                 .addChannelOption((option) =>
@@ -59,10 +59,16 @@ export default {
                 return await channel.execute(interaction, config, client);
             }
 
-            await replyUserError(interaction, { type: ErrorTypes.VALIDATION, message: 'This subcommand is not recognised.' });
+            await replyUserError(interaction, {
+                type: ErrorTypes.VALIDATION,
+                message: 'This subcommand is not recognised.',
+            });
         } catch (error) {
             logger.error('logging command error:', error);
-            await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: 'An unexpected error occurred.' }).catch(() => {});
+            await replyUserError(interaction, {
+                type: ErrorTypes.UNKNOWN,
+                message: 'An unexpected error occurred.',
+            }).catch(() => {});
         }
     },
 };
