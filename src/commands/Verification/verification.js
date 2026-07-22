@@ -101,7 +101,8 @@ async function handleSetup(interaction, guild, client) {
     const verificationChannel = interaction.options.getChannel("verification_channel");
     const verifiedRole = interaction.options.getRole("verified_role");
     const message = interaction.options.getString("message") || botConfig.verification.defaultMessage;
-    const buttonText = interaction.options.getString("button_text") || botConfig.verification.defaultButtonText;
+    const buttonText = interaction.options.getString("button_text") || 'Verificarme';
+    const imageUrl = interaction.options.getString("imagen") || null;
     const botMember = guild.members.me;
 
     if (!botMember) {
@@ -181,11 +182,12 @@ async function handleSetup(interaction, guild, client) {
 
     await InteractionHelper.safeDefer(interaction);
 
-    const verifyEmbed = createEmbed({
-        title: "Server Verification",
-        description: message,
-        color: getColor('success')
-    });
+const verifyEmbed = createEmbed({
+    title: "Verificación del servidor",
+    description: message,
+    color: getColor('success'),
+    image: imageUrl || undefined,
+});
 
 const verifyButton = new ActionRowBuilder().addComponents(
     new ButtonBuilder()
@@ -199,28 +201,29 @@ const verifyButton = new ActionRowBuilder().addComponents(
         components: [verifyButton]
     });
 
-    guildConfig.verification = {
-        enabled: true,
-        channelId: verificationChannel.id,
-        messageId: verifyMessage.id,
-        roleId: verifiedRole.id,
-        message: message,
-        buttonText: buttonText
-    };
+guildConfig.verification = {
+    enabled: true,
+    channelId: verificationChannel.id,
+    messageId: verifyMessage.id,
+    roleId: verifiedRole.id,
+    message: message,
+    buttonText: buttonText,
+    imageUrl: imageUrl,
+};
 
     await setGuildConfig(client, guild.id, guildConfig);
 
-    await InteractionHelper.safeEditReply(interaction, {
-        embeds: [successEmbed(
-            'Verification System Updated',
-            [
-                `Channel: ${verificationChannel}`,
-                `Verified Role: ${verifiedRole}`,
-                `Button Text: ${buttonText}`
-            ].join('\n')
-        )]
-    });
-}
+await InteractionHelper.safeEditReply(interaction, {
+    embeds: [successEmbed(
+        'Sistema de verificación actualizado',
+        [
+            `Canal: ${verificationChannel}`,
+            `Rol verificado: ${verifiedRole}`,
+            `Texto del botón: ${buttonText}`,
+            `Imagen: ${imageUrl || 'Ninguna'}`,
+        ].join('\n')
+    )]
+});
 
 async function handleRemove(interaction, guild, client) {
     const targetUser = interaction.options.getUser("user");
