@@ -33,7 +33,6 @@ export default {
                 );
 
                 const messageContent = welcomeConfig.welcomePing ? user.toString() : null;
-
                 const canEmbed = permissions.has(PermissionFlagsBits.EmbedLinks);
 
                 if (!canEmbed) {
@@ -41,7 +40,6 @@ export default {
                         content: messageContent || welcomeMessage
                     });
                 } else {
-                    // Estilo tipo RushPVP: autor del servidor, título simple, sin campos extra, color negro
                     const embed = new EmbedBuilder()
                         .setColor(0x000000)
                         .setAuthor({
@@ -50,7 +48,6 @@ export default {
                         })
                         .setTitle('¡Bienvenido!')
                         .setDescription(welcomeMessage)
-                        .setThumbnail(guild.iconURL({ size: 256 }) || undefined)
                         .setTimestamp();
 
                     if (welcomeConfig.welcomeImage) {
