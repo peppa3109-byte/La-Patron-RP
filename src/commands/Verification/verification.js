@@ -191,7 +191,7 @@ async function handleSetup(interaction, guild, client) {
     const verifyEmbed = createEmbed({
         title: "Verificación del servidor",
         description: message,
-        color: getColor('success'),
+        color: 0x000000, // negro
         image: imageUrl || undefined,
     });
 
@@ -227,6 +227,7 @@ async function handleSetup(interaction, guild, client) {
                 `Rol verificado: ${verifiedRole}`,
                 `Texto del botón: ${buttonText}`,
                 `Imagen: ${imageUrl || 'Ninguna'}`,
+                `Color: Negro`,
             ].join('\n')
         )]
     });
