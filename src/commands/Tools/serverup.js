@@ -13,7 +13,7 @@ import { logger } from '../../utils/logger.js';
 const DEFAULT_BANNER_URL = 'https://imgur.com/a/H3C8nNf';
 const DEFAULT_TITLE = 'ENVENENADO RP ESTA ABIERTO';
 const DEFAULT_CONNECT = 'cfx.re/join/xlladb5';
-const DEFAULT_EXTRA = 'O ABRE <#1518421283946238103> si tienes problemas para ingresar';
+const DEFAULT_EXTRA = O ABRE <#1518421283946238103> si tienes problemas para ingresar
 
 export default {
   data: new SlashCommandBuilder()
