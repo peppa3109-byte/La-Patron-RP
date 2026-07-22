@@ -12,4 +12,9 @@ export const GUILD_CONFIG_DEFAULTS = {
     dmOnClose: true,
     disabledCommands: {},
     disabledCategories: {},
+    whitelist: {
+        enabled: false,
+        channelId: null,
+        roleId: null,
+    },
 };
